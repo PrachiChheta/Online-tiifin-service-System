@@ -6,7 +6,7 @@ include('includes/dbconnection.php');
 <!DOCTYPE html>
 <html>
 <head>
-<title>Online Tiffin Service System | About Us Page</title>
+<title>Online Tiffin Service System | Contact Page</title>
 <link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="js/jquery.min.js"></script>
@@ -45,14 +45,14 @@ include('includes/dbconnection.php');
 	<div class="contact-section-page">
 		<div class="contact-head">
 		    <div class="container">
-				<h3>About Us</h3>
-				<p>Home/About Us</p>
+				<h3>Contact</h3>
+				<p>Home/Contact</p>
 			</div>
 		</div>
 		<div class="contact_top">
 			 		<div class="container">
 			 			<?php
-$sql="SELECT * from tblpage where PageType='aboutus'";
+$sql="SELECT * from tblpage where PageType='contactus'";
 $query = $dbh -> prepare($sql);
 $query->execute();
 $results=$query->fetchAll(PDO::FETCH_OBJ);
@@ -63,20 +63,31 @@ if($query->rowCount() > 0)
 foreach($results as $row)
 {               ?>
 			 		
-					        <div >
+					        <div class="col-md-12 company-right wow fadeInLeft" data-wow-delay="0.4s">
 					        	<div class="contact-map">
-			<img src="images/unnamed.jpg" width="1000" height="400" />
+			<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1578265.0941403757!2d-98.9828708842255!3d39.41170802696131!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54eab584e432360b%3A0x1c3bb99243deb742!2sUnited+States!5e0!3m2!1sen!2sin!4v1407515822047"> </iframe>
 		</div>
       
-	  <div>
+	  <div class="company-right">
 					        	<div class="company_ad">
-							     		<h3 style=""><?php  echo htmlentities($row->PageTitle);?></h3>
-							     		<br />
-							     		<span><?php  echo $row->PageDescription;?>.</span>
-			      						
+							     		<h3><?php  echo htmlentities($row->PageTitle);?></h3>
+							     		<span>Lorem ipsum dolor sit amet, consectetur adipiscing elit velit justo.</span>
+			      						<address>
+											 <p>email:<?php  echo htmlentities($row->Email);?></p>
+											 <p>phone:  <?php  echo htmlentities($row->MobileNumber);?></p>
+									   		<p>Address: <?php  echo htmlentities($row->PageDescription);?></p>
+									   	
+									 	 	
+							   			</address>
 							   		</div>
 									</div>	
-								
+									<div class="follow-us">
+										<h3>follow us on</h3>
+										<a href="#"><i class="facebook"></i></a>
+										<a href="#"><i class="twitter"></i></a>
+										<a href="#"><i class="google-pluse"></i></a>
+									</div>
+			
 							
 							 </div>
 						</div> <?php $cnt=$cnt+1;}} ?>

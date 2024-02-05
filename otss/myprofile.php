@@ -2,11 +2,31 @@
 session_start();
 error_reporting(0);
 include('includes/dbconnection.php');
-?>
+if (strlen($_SESSION['otssuid']==0)) {
+  header('location:logout.php');
+  } else{
+    if(isset($_POST['submit']))
+  {
+    $uid=$_SESSION['otssuid'];
+    $AName=$_POST['name'];
+  $mobno=$_POST['mobilenumber'];
+  $email=$_POST['email'];
+  $sql="update tbluser set FullName=:name,MobileNumber=:mobilenumber where ID=:uid";
+     $query = $dbh->prepare($sql);
+     $query->bindParam(':name',$AName,PDO::PARAM_STR);
+     $query->bindParam(':mobilenumber',$mobno,PDO::PARAM_STR);
+     $query->bindParam(':uid',$uid,PDO::PARAM_STR);
+$query->execute();
+
+        echo '<script>alert("Profile has been updated")</script>';
+     
+
+  }
+  ?>
 <!DOCTYPE html>
 <html>
 <head>
-<title>Online Tiffin Service System | About Us Page</title>
+<title>Online Tiffin Service System | Order Page</title>
 <link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="js/jquery.min.js"></script>
@@ -45,44 +65,57 @@ include('includes/dbconnection.php');
 	<div class="contact-section-page">
 		<div class="contact-head">
 		    <div class="container">
-				<h3>About Us</h3>
-				<p>Home/About Us</p>
+				<h3>My Profile</h3>
+				<p>Home/Profile</p>
 			</div>
 		</div>
 		<div class="contact_top">
 			 		<div class="container">
-			 			<?php
-$sql="SELECT * from tblpage where PageType='aboutus'";
+			 			<div class="col-md-6 contact_left wow fadeInRight" data-wow-delay="0.4s">
+			 				<h4>My Profile</h4>
+			 				<p>View Your Profile !!!!!!.</p>
+			 				 <?php
+$uid=$_SESSION['otssuid'];
+$sql="SELECT * from  tbluser where ID=:uid";
 $query = $dbh -> prepare($sql);
+$query->bindParam(':uid',$uid,PDO::PARAM_STR);
 $query->execute();
 $results=$query->fetchAll(PDO::FETCH_OBJ);
-
 $cnt=1;
 if($query->rowCount() > 0)
 {
 foreach($results as $row)
 {               ?>
-			 		
-					        <div >
-					        	<div class="contact-map">
-			<img src="images/unnamed.jpg" width="1000" height="400" />
-		</div>
-      
-	  <div>
-					        	<div class="company_ad">
-							     		<h3 style=""><?php  echo htmlentities($row->PageTitle);?></h3>
-							     		<br />
-							     		<span><?php  echo $row->PageDescription;?>.</span>
-			      						
-							   		</div>
-									</div>	
-								
+							  <form method="post">
+								 <div>
+<p style="font-size: 20px;color: blue;"><strong>Name:</strong><br /><input type="text" class="form-control" value="<?php  echo $row->FullName;?>" style="font-size: 20px" required="true" name="name"></p>
+
+<p style="font-size: 20px;color: blue;"><strong>Email:</strong><br /><input type="text" class="form-control" value="<?php  echo $row->Email;?>" required="true" name="email" style="font-size: 20px" readonly="true"></p>
+<p style="font-size: 20px;color: blue;"><strong>Contact Number:</strong><br /> <input type="text" class="form-control" value="<?php  echo $row->MobileNumber;?>" required="true" name="mobilenumber" style="font-size: 20px" maxlength='10'></p>
+
+<p style="font-size: 20px;color: blue;"><strong>Registration Date:</strong><br /> <input type="text" class="form-control" value="<?php  echo $row->RegDate;?>" style="font-size: 20px" readonly="true"></p>	
+		
+									
+						<?php $cnt=$cnt+1;}} ?>
+<div class="clearfix" style="padding-top: 20px"> </div>
+									 <div class="sub-button wow swing animated" data-wow-delay= "0.4s">
+									 	<p style="color: red" ><input name="submit" style="color: red;font-size: 20px" class="btn btn-success" type="submit" value="Update"></p>
+									 </div>
+						          </div>
+						       </form>
+					        </div>
+		        <div class="col-md-6 company-right wow fadeInLeft" data-wow-delay="0.4s">
+					        <img src="images/image.jpg" width="400" height="400" />
+									</div>
+			
 							
 							 </div>
-						</div> <?php $cnt=$cnt+1;}} ?>
+						
+						</div>
 					</div>
 
 	</div>
+
 	<?php include_once('includes/footer.php');?>
 	  <script type="text/javascript">
 						$(document).ready(function() {
@@ -102,4 +135,4 @@ foreach($results as $row)
 				<a href="#" id="toTop" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
 
 </body>
-</html>
+</html><?php }  ?>
